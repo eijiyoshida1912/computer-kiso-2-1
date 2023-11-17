@@ -1,40 +1,39 @@
 void setup() {
     size(500, 500);
     smooth();
-    background(255);
+    background(0);
     noLoop();
 }
 
 void draw() {
     
-    int rWidth = 10;
-    int rHeight = 10;
-    //int cellY = 50;
-    
-    /*
-    for (float j = 1; j <= 4; j += 1) {
-    for (float i = 0; i < 100; i += 1) {
-    drawCell((rWidth + 2) * i + j * 4, rHeight * j * 1.2, rWidth, rHeight);
-}
-}
-    */
-    
-    float nextHeightNoise = 0;
-    float nextCellYNoise = 0;
-    for (float i = 0; i < 100; i += 1) {
-        float heightNoise = noise(i) * 20;
-        float cellYNoise = noise(i) * 20;
-       // float cellYNoise = 20;
-        drawCell(
-            (rWidth + 2) * i,
-            cellYNoise + 50,
-            rWidth,
-            rHeight + nextHeightNoise + nextCellYNoise/2,
-            rHeight + heightNoise + nextCellYNoise/2
-        );
 
-        nextHeightNoise = heightNoise;
-        nextCellYNoise = cellYNoise;
+    for (float j = 1; j < 10; j += 1) {
+        float linePosition = noise(j) * width;
+        float colorR = random(150, 255);
+        float colorG = random(150, 255);
+        float colorB = random(150, 255);
+        float randomSize = random(50);
+        float sinHeight = randomSize + 5;
+        float rWidth = sinHeight * 0.2; 
+        float lineOpacity = randomSize * 5;
+float rad = radians(45);
+ rotate(rad);
+    for (float i = 0; i < 1500; i += 1) {
+        float cellYNoise = noise(i) * 20;
+        float opacityNoise = noise(i) * 200 + 50;
+        drawCell(
+            (rWidth + 2) * i * 0.1,
+           // linePosition * j + sin(i) * sinHeight,
+            linePosition + sin(i) * sinHeight,
+            rWidth,
+            colorR,
+            colorG,
+            colorB,
+            opacityNoise,
+            lineOpacity
+        );
+    }
     }
 }
 
@@ -43,21 +42,14 @@ void draw() {
 x: 細胞のx位置
 y: 細胞の中心y位置
 cellWidth: 細胞の幅
-startHeight: 細胞の初めの高さ
-endHeight: 細胞の終わりの高さ
 */
 
-void drawCell(float x, float y, float cellWidth, float startHeight, float endHeight) {
-    fill(100, 100);
+void drawCell(float x, float y, float cellWidth, float r, float g, float b, float opacity, float allOpacity) {
     noStroke();
-    ellipse(x + cellWidth / 2, y, 5, 5);
-    fill(100, 40);
-    beginShape();
-    vertex(x, y - startHeight / 2);
-    vertex(x + cellWidth, y - endHeight / 2);
-    vertex(x + cellWidth, y + endHeight / 2);
-    vertex(x, y + startHeight / 2);
-    endShape();
+    fill(r, g, b, opacity - allOpacity);
+    ellipse(x + cellWidth / 2, y, cellWidth, cellWidth);
+    fill(r, g, b, opacity + 100 - allOpacity);
+    ellipse(x + cellWidth / 2, y, 2, 2);
 }
 
 
